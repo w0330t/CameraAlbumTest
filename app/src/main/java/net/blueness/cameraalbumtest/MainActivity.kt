@@ -18,6 +18,7 @@ import java.io.File
 class MainActivity : AppCompatActivity() {
 
     private val FINAL_TAKE_PHOTO = 1
+    val FINAL_CHOOSE_PHOTO = 2
     private var picture: ImageView? = null
     private var imageUri: Uri? = null
 
@@ -26,7 +27,9 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         val takePhoto: Button = find(R.id.take_photo)
+        val chooseFromAlbum: Button = find(R.id.choose_from_album)
         picture = find(R.id.picture)
+
         takePhoto.setOnClickListener{
             val outputImage = File(externalCacheDir, "output_image.jpg")
             if(outputImage.exists()) {
@@ -43,6 +46,10 @@ class MainActivity : AppCompatActivity() {
             intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri)
             startActivityForResult(intent, FINAL_TAKE_PHOTO)
         }
+
+        chooseFromAlbum.setOnClickListener{
+
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -50,12 +57,8 @@ class MainActivity : AppCompatActivity() {
         when(requestCode){
             FINAL_TAKE_PHOTO ->
                 if (resultCode == Activity.RESULT_OK) {
-
                     val bitmap = BitmapFactory.decodeStream(getContentResolver().openInputStream(imageUri))
-                    Log.d("MainActivity", bitmap.width.toString())
-                    Log.d("MainActivity", bitmap.height.toString())
                     picture!!.setImageBitmap(bitmap)
-//                    Log.d("MainActivity", picture.toString())
                 }
         }
     }
